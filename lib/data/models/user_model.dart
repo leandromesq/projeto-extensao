@@ -6,7 +6,7 @@ part 'user_model.g.dart';
 @freezed
 sealed class User with _$User {
   const factory User({
-    required String id,
+    required int id,
     required String name,
     required String email,
   }) = _User;
@@ -14,7 +14,7 @@ sealed class User with _$User {
   const factory User.notLogged() = NotLoggedUser;
 
   const factory User.logged({
-    required String id,
+    required int id,
     required String name,
     required String email,
     required String token,

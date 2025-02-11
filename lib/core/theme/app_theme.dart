@@ -1,83 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rachadinha/core/theme/app_colors.dart';
-import 'package:rachadinha/core/theme/app_text_style.dart';
 import 'package:rachadinha/core/utils/extensions/padding_extensions.dart';
 
 ThemeData get appTheme {
 //
   const colors = AppColors();
-  const textStyles = AppTextStyles();
 
   return ThemeData(
     colorScheme: ColorScheme(
       brightness: Brightness.light,
-      primary: colors.grayStrong,
-      onPrimary: colors.grayMedium,
-      secondary: colors.red,
-      onSecondary: colors.red,
-      error: colors.red,
-      onError: colors.red,
-      surface: const Color(0xffffffff),
-      onSurface: colors.blackBackground,
+      primary: colors.primarygreen,
+      onPrimary: colors.light,
+      secondary: colors.secondarygreen,
+      onSecondary: colors.light,
+      tertiary: colors.tertiarygreen,
+      onTertiary: colors.light,
+      primaryContainer: colors.darkgreen,
+      onPrimaryContainer: colors.light,
+      error: colors.tertiarygreen,
+      onError: colors.light,
+      surface: colors.primarygreen,
+      onSurface: colors.black,
     ),
-    textTheme: TextTheme(
-      headlineLarge: textStyles.headlineLarge.copyWith(
-        color: const Color(0xff222222),
-      ),
-      headlineSmall: textStyles.headlineSmall.copyWith(
-        color: const Color(0xff222222),
-      ),
-      bodyMedium: textStyles.bodyMedium.copyWith(
-        color: const Color(0xff000000),
-      ),
-      bodySmall: textStyles.bodySmall.copyWith(
-        color: const Color(0xff222222),
-      ),
-      labelLarge: textStyles.labelLarge.copyWith(
-        color: const Color(0xff000000),
-      ),
-      labelMedium: textStyles.labelMedium.copyWith(
-        color: const Color(0xff000000),
-      ),
-      labelSmall: textStyles.labelSmall.copyWith(
-        color: const Color(0xff000000),
-      ),
-      displayLarge: textStyles.displayLarge.copyWith(
-        color: const Color(0xff000000),
-      ),
-    ),
+    textTheme: GoogleFonts.sairaCondensedTextTheme().copyWith(),
     extensions: const [
       AppColors(),
-      AppTextStyles(),
     ],
     inputDecorationTheme: InputDecorationTheme(
-      labelStyle: const TextStyle(color: Colors.blue),
-      hintStyle: const TextStyle(
+      labelStyle: TextStyle(color: colors.grayText),
+      hintStyle: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: Color(0xffC7C7C7),
+        color: colors.darkgreen,
       ),
-      suffixIconColor: const Color(0xff939AA5),
+      prefixIconColor: colors.darkgreen,
+      suffixIconColor: colors.darkgreen,
       filled: true,
-      fillColor: const Color(0xffF3F3F3),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+      fillColor: colors.light,
+      border: const OutlineInputBorder(
+        // borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
       ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+      enabledBorder: const OutlineInputBorder(
+        // borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(
-          color: Color(0xffC7C7C7),
+        // borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: colors.darkgreen,
           width: 2.0,
         ),
       ),
     ),
-    iconTheme: const IconThemeData(
-      color: Colors.blue,
+    iconTheme: IconThemeData(
+      color: colors.primarygreen,
       size: 16,
     ),
     iconButtonTheme: IconButtonThemeData(
@@ -104,12 +82,13 @@ ThemeData get appTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all(const Size(double.infinity, 48)),
-        backgroundColor: WidgetStateProperty.all(colors.red),
+        backgroundColor: WidgetStateProperty.all(colors.tertiarygreen),
+        foregroundColor: WidgetStateProperty.all(colors.darkgreen),
         padding: WidgetStateProperty.all(14.0.paddingVertical),
         shape: WidgetStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
+          const RoundedRectangleBorder(
+              // borderRadius: BorderRadius.circular(2),
+              ),
         ),
       ),
     ),

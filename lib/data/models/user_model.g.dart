@@ -7,7 +7,7 @@ part of 'user_model.dart';
 // **************************************************************************
 
 _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
-      id: json['id'] as String,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       email: json['email'] as String,
       $type: json['runtimeType'] as String?,
@@ -33,7 +33,7 @@ Map<String, dynamic> _$$NotLoggedUserImplToJson(_$NotLoggedUserImpl instance) =>
 
 _$LoggedUserImpl _$$LoggedUserImplFromJson(Map<String, dynamic> json) =>
     _$LoggedUserImpl(
-      id: json['id'] as String,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       email: json['email'] as String,
       token: json['token'] as String,

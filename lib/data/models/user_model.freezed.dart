@@ -33,27 +33,27 @@ User _$UserFromJson(Map<String, dynamic> json) {
 mixin _$User {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String name, String email) $default, {
+    TResult Function(int id, String name, String email) $default, {
     required TResult Function() notLogged,
-    required TResult Function(String id, String name, String email,
-            String token, String refreshToken)
+    required TResult Function(int id, String name, String email, String token,
+            String refreshToken)
         logged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String name, String email)? $default, {
+    TResult? Function(int id, String name, String email)? $default, {
     TResult? Function()? notLogged,
-    TResult? Function(String id, String name, String email, String token,
+    TResult? Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String name, String email)? $default, {
+    TResult Function(int id, String name, String email)? $default, {
     TResult Function()? notLogged,
-    TResult Function(String id, String name, String email, String token,
+    TResult Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
     required TResult orElse(),
@@ -112,7 +112,7 @@ abstract class _$$UserImplCopyWith<$Res> {
           _$UserImpl value, $Res Function(_$UserImpl) then) =
       __$$UserImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String id, String name, String email});
+  $Res call({int id, String name, String email});
 }
 
 /// @nodoc
@@ -135,7 +135,7 @@ class __$$UserImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -162,7 +162,7 @@ class _$UserImpl implements _User {
       _$$UserImplFromJson(json);
 
   @override
-  final String id;
+  final int id;
   @override
   final String name;
   @override
@@ -201,10 +201,10 @@ class _$UserImpl implements _User {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String name, String email) $default, {
+    TResult Function(int id, String name, String email) $default, {
     required TResult Function() notLogged,
-    required TResult Function(String id, String name, String email,
-            String token, String refreshToken)
+    required TResult Function(int id, String name, String email, String token,
+            String refreshToken)
         logged,
   }) {
     return $default(id, name, email);
@@ -213,9 +213,9 @@ class _$UserImpl implements _User {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String name, String email)? $default, {
+    TResult? Function(int id, String name, String email)? $default, {
     TResult? Function()? notLogged,
-    TResult? Function(String id, String name, String email, String token,
+    TResult? Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
   }) {
@@ -225,9 +225,9 @@ class _$UserImpl implements _User {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String name, String email)? $default, {
+    TResult Function(int id, String name, String email)? $default, {
     TResult Function()? notLogged,
-    TResult Function(String id, String name, String email, String token,
+    TResult Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
     required TResult orElse(),
@@ -282,13 +282,13 @@ class _$UserImpl implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String id,
+      {required final int id,
       required final String name,
       required final String email}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
-  String get id;
+  int get id;
   String get name;
   String get email;
 
@@ -348,10 +348,10 @@ class _$NotLoggedUserImpl implements NotLoggedUser {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String name, String email) $default, {
+    TResult Function(int id, String name, String email) $default, {
     required TResult Function() notLogged,
-    required TResult Function(String id, String name, String email,
-            String token, String refreshToken)
+    required TResult Function(int id, String name, String email, String token,
+            String refreshToken)
         logged,
   }) {
     return notLogged();
@@ -360,9 +360,9 @@ class _$NotLoggedUserImpl implements NotLoggedUser {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String name, String email)? $default, {
+    TResult? Function(int id, String name, String email)? $default, {
     TResult? Function()? notLogged,
-    TResult? Function(String id, String name, String email, String token,
+    TResult? Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
   }) {
@@ -372,9 +372,9 @@ class _$NotLoggedUserImpl implements NotLoggedUser {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String name, String email)? $default, {
+    TResult Function(int id, String name, String email)? $default, {
     TResult Function()? notLogged,
-    TResult Function(String id, String name, String email, String token,
+    TResult Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
     required TResult orElse(),
@@ -441,11 +441,7 @@ abstract class _$$LoggedUserImplCopyWith<$Res> {
       __$$LoggedUserImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
-      {String id,
-      String name,
-      String email,
-      String token,
-      String refreshToken});
+      {int id, String name, String email, String token, String refreshToken});
 }
 
 /// @nodoc
@@ -471,7 +467,7 @@ class __$$LoggedUserImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -508,7 +504,7 @@ class _$LoggedUserImpl implements LoggedUser {
       _$$LoggedUserImplFromJson(json);
 
   @override
-  final String id;
+  final int id;
   @override
   final String name;
   @override
@@ -555,10 +551,10 @@ class _$LoggedUserImpl implements LoggedUser {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String name, String email) $default, {
+    TResult Function(int id, String name, String email) $default, {
     required TResult Function() notLogged,
-    required TResult Function(String id, String name, String email,
-            String token, String refreshToken)
+    required TResult Function(int id, String name, String email, String token,
+            String refreshToken)
         logged,
   }) {
     return logged(id, name, email, token, refreshToken);
@@ -567,9 +563,9 @@ class _$LoggedUserImpl implements LoggedUser {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String name, String email)? $default, {
+    TResult? Function(int id, String name, String email)? $default, {
     TResult? Function()? notLogged,
-    TResult? Function(String id, String name, String email, String token,
+    TResult? Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
   }) {
@@ -579,9 +575,9 @@ class _$LoggedUserImpl implements LoggedUser {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String name, String email)? $default, {
+    TResult Function(int id, String name, String email)? $default, {
     TResult Function()? notLogged,
-    TResult Function(String id, String name, String email, String token,
+    TResult Function(int id, String name, String email, String token,
             String refreshToken)?
         logged,
     required TResult orElse(),
@@ -636,7 +632,7 @@ class _$LoggedUserImpl implements LoggedUser {
 
 abstract class LoggedUser implements User {
   const factory LoggedUser(
-      {required final String id,
+      {required final int id,
       required final String name,
       required final String email,
       required final String token,
@@ -645,7 +641,7 @@ abstract class LoggedUser implements User {
   factory LoggedUser.fromJson(Map<String, dynamic> json) =
       _$LoggedUserImpl.fromJson;
 
-  String get id;
+  int get id;
   String get name;
   String get email;
   String get token;
