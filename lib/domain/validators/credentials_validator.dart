@@ -4,15 +4,15 @@ import 'package:rachadinha/domain/dtos/credentials.dart';
 class CredentialsValidator extends LucidValidator<Credentials> {
   CredentialsValidator() {
     ruleFor((c) => c.email, key: 'email') //
-        .notEmpty()
-        .validEmail();
+        .notEmpty(message: 'Preenchimento obrigatório.')
+        .validEmail(message: 'Email inválido.');
 
     ruleFor((c) => c.password, key: 'password') //
-        .notEmpty()
-        .minLength(6)
-        .mustHaveLowercase()
-        .mustHaveUppercase()
-        .mustHaveNumber()
-        .mustHaveSpecialCharacter();
+        .notEmpty(message: 'Preenchimento obrigatório.')
+        .minLength(6, message: 'Mínimo 6 caracteres.')
+        .mustHaveLowercase(message: 'Mínimo 1 letra minúscula.')
+        .mustHaveUppercase(message: 'Mínimo 1 letra maiúscula.')
+        .mustHaveNumber(message: 'Mínimo 1 número.')
+        .mustHaveSpecialCharacter(message: 'Mínimo 1 caractere especial.');
   }
 }

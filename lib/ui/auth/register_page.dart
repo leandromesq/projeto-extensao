@@ -12,13 +12,13 @@ import 'package:rachadinha/ui/auth/viewmodels/auth_viewmodel.dart';
 import 'package:result_command/result_command.dart';
 import 'package:routefly/routefly.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final ctrl = injector.get<AuthViewmodel>();
 
   final validator = CredentialsValidator();
@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: 160,
+                        width: 140,
                         child: Divider(
                           color: context.colors.light,
                           thickness: 2,
@@ -84,14 +84,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Text(
-                        'Login',
+                        'Cadastre-se',
                         style: TextStyle(
                             color: context.colors.light,
                             fontSize: 16,
                             fontWeight: FontWeight.w600),
                       ),
                       SizedBox(
-                        width: 160,
+                        width: 140,
                         child: Divider(
                           color: context.colors.light,
                           thickness: 2,
@@ -107,6 +107,39 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: Column(
                   children: [
+                    TextFormField(
+                      onChanged: credentials.setEmail,
+                      validator: validator.byField(credentials, 'email'),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: const InputDecoration(
+                          labelText: 'nome completo',
+                          prefixIcon: Icon(Icons.person)),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      onTap: () {
+                        showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now()
+                              .subtract(const Duration(days: 36500)),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 365)),
+                        ).then((value) {
+                          if (value != null) {
+                            credentials.setEmail(value.toString());
+                          }
+                        });
+                      },
+                      onChanged: credentials.setEmail,
+                      readOnly: true,
+                      validator: validator.byField(credentials, 'email'),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: const InputDecoration(
+                          labelText: 'data de nascimento',
+                          prefixIcon: Icon(Icons.calendar_month)),
+                    ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       onChanged: credentials.setEmail,
                       validator: validator.byField(credentials, 'email'),
@@ -150,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                                       width: 20,
                                       child: CircularProgressIndicator())
                                   : const Text(
-                                      'Login',
+                                      'Cadastrar-se',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w800),
@@ -160,10 +193,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Routefly.navigate(routePaths.auth.register);
+                        // Add navigation to signup page
                       },
                       child: Text(
-                        'AINDA NÃO TENHO UMA CONTA',
+                        'JÁ TENHO UMA CONTA',
                         style: TextStyle(
                           color: context.colors.light,
                           fontWeight: FontWeight.w600,

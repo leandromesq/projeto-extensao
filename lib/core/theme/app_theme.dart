@@ -61,8 +61,9 @@ ThemeData get appTheme {
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
         padding: WidgetStateProperty.all(const EdgeInsets.all(18.0)),
-        backgroundColor: WidgetStateProperty.all(const Color(0xffC22445)),
-        foregroundColor: WidgetStateProperty.all(Colors.white),
+        backgroundColor: WidgetStateProperty.all(colors.light),
+        foregroundColor: WidgetStateProperty.all(colors.light),
+        iconColor: WidgetStateProperty.all(colors.darkgreen),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -90,6 +91,23 @@ ThemeData get appTheme {
               // borderRadius: BorderRadius.circular(2),
               ),
         ),
+      ),
+    ),
+    datePickerTheme: DatePickerThemeData(
+      locale: const Locale('pt', 'BR'),
+      rangePickerBackgroundColor: colors.error,
+      dividerColor: colors.darkgreen,
+      backgroundColor: colors.light,
+      todayBackgroundColor: WidgetStateProperty.all(colors.darkgreen),
+      todayForegroundColor: WidgetStateProperty.all(colors.light),
+      headerForegroundColor: colors.light,
+      headerBackgroundColor: colors.darkgreen,
+      dayStyle: TextStyle(color: colors.darkgreen),
+      cancelButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all(colors.darkgreen),
+      ),
+      confirmButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all(colors.darkgreen),
       ),
     ),
   );
