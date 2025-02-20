@@ -1,0 +1,2 @@
+C:/Users/leand/Documents/GitHub/projeto-extensao/android/app/.cxx/RelWithDebInfo/365o174j/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/leand/Documents/GitHub/projeto-extensao/android/app/.cxx/RelWithDebInfo/365o174j/armeabi-v7a/CMakeFiles/rebuild_cache.dir

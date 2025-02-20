@@ -1,0 +1,2 @@
+C:/Users/leand/Documents/GitHub/projeto-extensao/android/app/.cxx/Debug/5n345o2r/x86/CMakeFiles/edit_cache.dir
+C:/Users/leand/Documents/GitHub/projeto-extensao/android/app/.cxx/Debug/5n345o2r/x86/CMakeFiles/rebuild_cache.dir

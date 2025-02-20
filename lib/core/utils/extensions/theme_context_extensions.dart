@@ -10,6 +10,4 @@ extension ThemeExtension on BuildContext {
   AppColors get colors => theme.colors;
 
   TextTheme get textTheme => theme.textTheme;
-
-  bool get themeIsDark => theme.colorScheme.brightness == Brightness.dark;
 }
