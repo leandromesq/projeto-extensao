@@ -60,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const Spacer(flex: 2),
               Column(
                 children: [
-                  Text('teste',
+                  Text('Rachadinha',
                       style: GoogleFonts.lemon(
                         textStyle: TextStyle(
                           fontSize: 40,
@@ -70,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       )),
                   const SizedBox(height: 10),
                   Icon(FontAwesomeIcons.moneyBillTransfer,
-                      size: 80, color: context.colors.light),
+                      size: 64, color: context.colors.light),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,7 +193,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Add navigation to signup page
+                        Routefly.navigate(routePaths.auth.login);
                       },
                       child: Text(
                         'JÁ TENHO UMA CONTA',
