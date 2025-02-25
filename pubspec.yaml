@@ -9,6 +9,7 @@ environment:
 dependencies:
   auto_injector: ^2.0.5
   dio: ^5.8.0+1
+  dotted_dashed_line: ^0.0.3
   flutter:
     sdk: flutter
   flutter_localizations:

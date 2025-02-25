@@ -28,7 +28,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: context.colors.primarygreen,
           size: 38,
         ),
-        onPressed: () {},
+        onPressed: () => Scaffold.of(context).openDrawer(),
       ),
       backgroundColor: context.colors.light,
       actions: [

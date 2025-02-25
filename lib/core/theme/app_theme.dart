@@ -110,5 +110,17 @@ ThemeData get appTheme {
         foregroundColor: WidgetStateProperty.all(colors.darkgreen),
       ),
     ),
+    dialogTheme: DialogTheme(
+      backgroundColor: colors.light,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
+    ),
+    drawerTheme: DrawerThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      backgroundColor: colors.primarygreen,
+    ),
   );
 }
