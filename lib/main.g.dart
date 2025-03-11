@@ -18,6 +18,11 @@ List<RouteEntity> get routes => [
         uri: Uri.parse('/home'),
         routeBuilder: b2Builder,
       ),
+      RouteEntity(
+        key: '/qrcode',
+        uri: Uri.parse('/qrcode'),
+        routeBuilder: b3Builder,
+      ),
     ];
 
 const routePaths = (
@@ -28,4 +33,5 @@ const routePaths = (
     register: '/auth/register',
   ),
   home: '/home',
+  qrcode: '/qrcode',
 );

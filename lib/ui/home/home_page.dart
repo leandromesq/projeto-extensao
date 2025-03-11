@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rachadinha/core/utils/extensions/screen_extensions.dart';
 import 'package:rachadinha/core/utils/extensions/theme_context_extensions.dart';
 import 'package:rachadinha/ui/home/widgets/home_app_bar.dart';
+import 'package:rachadinha/ui/home/widgets/home_drawer.dart';
 import 'package:rachadinha/ui/home/widgets/receipt_dialog.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,39 +20,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: context.colors.light,
         appBar: const HomeAppBar(),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              const DrawerHeader(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('Rachadinha',
-                        style: TextStyle(fontSize: 28, color: Colors.white)),
-                    Spacer(),
-                    Icon(
-                      FontAwesomeIcons.bars,
-                      color: Colors.white,
-                      size: 38,
-                    ),
-                  ],
-                ),
-              ),
-              ListTile(
-                title: const Text('Item 1'),
-                onTap: () {
-                  // Handle tap on item 1
-                },
-              ),
-              ListTile(
-                title: const Text('Item 2'),
-                onTap: () {
-                  // Handle tap on item 2
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: const HomeDrawer(),
         body: Column(
           children: [
             Divider(color: context.colors.primarygreen),
