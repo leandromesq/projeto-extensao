@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rachadinha/core/utils/extensions/screen_extensions.dart';
 import 'package:rachadinha/core/utils/extensions/theme_context_extensions.dart';
 import 'package:routefly/routefly.dart';
 
@@ -28,21 +29,39 @@ class _QRCodePageState extends State<QRCodePage> {
             ],
           ),
         ),
-        leading: Container(
-          width: 40,
-          height: 40,
-          padding: const EdgeInsets.all(8),
-          color: context.colors.primarygreen,
-          child: IconButton(
-            color: context.colors.white,
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 38,
-            ),
-            onPressed: () => Routefly.pop(context),
-          ),
-        ),
       ),
+      body: Center(
+          child: Container(
+        width: 300,
+        padding: const EdgeInsets.all(16),
+        height: context.screenHeight * 0.7,
+        child: Column(
+          children: [
+            const Icon(
+              FontAwesomeIcons.qrcode,
+              size: 128,
+              color: Colors.white,
+            ),
+            const Spacer(),
+            SizedBox(
+              width: double.maxFinite,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  Routefly.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: context.colors.tertiarygreen,
+                  iconSize: 34,
+                ),
+                child: const Text('Voltar',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ],
+        ),
+      )),
     );
   }
 }
