@@ -17,6 +17,7 @@ class _QRCodePageState extends State<QRCodePage> {
     return Scaffold(
       backgroundColor: context.colors.primarygreen,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(
           child: Column(
             children: [
@@ -37,10 +38,13 @@ class _QRCodePageState extends State<QRCodePage> {
         height: context.screenHeight * 0.7,
         child: Column(
           children: [
-            const Icon(
-              FontAwesomeIcons.qrcode,
-              size: 128,
-              color: Colors.white,
+            InkWell(
+              onTap: () {},
+              child: const Icon(
+                Icons.qr_code_scanner,
+                size: 264,
+                color: Colors.white,
+              ),
             ),
             const Spacer(),
             SizedBox(
@@ -52,7 +56,6 @@ class _QRCodePageState extends State<QRCodePage> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: context.colors.tertiarygreen,
-                  iconSize: 34,
                 ),
                 child: const Text('Voltar',
                     style:

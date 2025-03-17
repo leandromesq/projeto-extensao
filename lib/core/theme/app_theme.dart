@@ -117,8 +117,8 @@ ThemeData get appTheme {
       ),
     ),
     drawerTheme: DrawerThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.horizontal(right: Radius.circular(24)),
       ),
       backgroundColor: colors.primarygreen,
     ),
