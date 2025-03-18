@@ -2,17 +2,15 @@ import 'dart:async';
 
 import 'package:rachadinha/data/models/user_model.dart';
 import 'package:rachadinha/data/repositories/auth/auth_repository.dart';
-import 'package:rachadinha/data/services/auth/auth_client_http.dart';
 import 'package:rachadinha/data/services/auth/auth_local_storage.dart';
 import 'package:rachadinha/domain/dtos/credentials.dart';
 import 'package:rachadinha/domain/validators/credentials_validator.dart';
 import 'package:result_dart/result_dart.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  AuthRepositoryImpl(this._authLocalStorage, this._authClientHttp);
+  AuthRepositoryImpl(this._authLocalStorage);
 
   final AuthLocalStorage _authLocalStorage;
-  final AuthClientHttp _authClientHttp;
 
   final _streamController = StreamController<User>.broadcast();
 
@@ -28,8 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
     if (!validator.validate(credentials).isValid) {
       return Failure(Exception('Invalid credentials'));
     }
-
-    return _authClientHttp //
+    return _authLocalStorage //
         .login(credentials)
         .flatMap(_authLocalStorage.saveUser)
         .onSuccess(_streamController.add);

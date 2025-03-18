@@ -1,14 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rachadinha/core/config/dependencies.dart';
 import 'package:rachadinha/core/theme/app_theme.dart';
 import 'package:rachadinha/core/utils/transitions/transitions.dart';
+import 'package:rachadinha/firebase_options.dart';
 import 'package:routefly/routefly.dart';
 
 import 'main.route.dart';
 part 'main.g.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   setupInjection();
   runApp(const AppWidget());
 }

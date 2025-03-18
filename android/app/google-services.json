@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "993255238089",
+    "project_id": "rachadinhaunifil",
+    "storage_bucket": "rachadinhaunifil.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993255238089:android:a5c02c4b28fda92285e018",
+        "android_client_info": {
+          "package_name": "com.example.rachadinha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv9Ud4oEaw6c4X03KeKsVG7_aHWmWcShk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
