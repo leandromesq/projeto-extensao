@@ -11,8 +11,15 @@ class AuthViewmodel extends ChangeNotifier {
   AuthViewmodel(this._authRepository);
 
   late final loginCommand = Command1(_login);
+  late final registerCommand = Command1(register);
 
-  AsyncResult<LoggedUser> _login(Credentials credentials) async {
+  AsyncResult<UserModel> _login(Credentials credentials) async {
     return await _authRepository.login(credentials);
   }
+
+  AsyncResult<UserModel> register(Credentials credentials) async {
+    return await _authRepository.register(credentials);
+  }
+
+  Future<void> logout() async => await _authRepository.logout();
 }

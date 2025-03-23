@@ -1,94 +1,122 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rachadinha/data/models/user_model.dart';
+import 'package:result_dart/result_dart.dart';
 
 class AuthFirestore {
-  final FirebaseFirestore _store = FirebaseFirestore.instance;
+  final FirebaseFirestore _store;
+  final FirebaseAuth _auth;
 
-  // Adicionando um usuário
-  Future<void> adicionarUsuario({
+  AuthFirestore({FirebaseFirestore? firestore, FirebaseAuth? auth})
+      : _store = firestore ?? FirebaseFirestore.instance,
+        _auth = auth ?? FirebaseAuth.instance;
+
+  // Criar usuário com autenticação
+  AsyncResult<UserModel> addUser({
     required String name,
     required String email,
     required String password,
-    required String profilepic,
-    required String qrcode,
+    required DateTime birthDate,
   }) async {
     try {
-      await _store.collection('users').add({
+      // Criar usuário no Firebase Auth
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Salvar informações no Firestore (sem a senha!)
+      await _store.collection('users').doc(userCredential.user!.uid).set({
         'name': name,
         'email': email,
-        'password': password, // Em produção, criptografe a senha!
-        'profilepic': profilepic,
-        'qrcode': qrcode,
+        'profilepic': '',
+        'qrcode': '',
+        'birthDate': birthDate.toString(),
+        'createdAt': DateTime.now(),
       });
-      log('Usuário adicionado com sucesso!');
+
+      log('Usuário autenticado e salvo no Firestore!');
+      return Success(UserModel(
+        id: userCredential.user!.uid,
+        name: name,
+        email: email,
+        birthDate: birthDate,
+        profilepic: '',
+        qrcode: '',
+      ));
     } catch (e) {
-      log('Erro ao adicionar usuário: $e');
+      log('Erro ao criar usuário: $e');
+      return Failure(Exception(e.toString()));
     }
   }
 
-  // Adicionando um pedido
-  Future<String> adicionarPedido({
-    required String userId,
-    required double total,
-    required DateTime date,
+  // Login de usuário
+  AsyncResult<String> loginUser({
+    required String email,
+    required String password,
   }) async {
     try {
-      DocumentReference docRef = await _store.collection('orders').add({
-        'userId': userId,
-        'total': total,
-        'date': Timestamp.fromDate(date),
-      });
-      log('Pedido adicionado com ID: ${docRef.id}');
-      return docRef.id;
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      log('Usuário logado com sucesso!');
+
+      User? user = userCredential.user;
+      log('UID: ${user!.uid}');
+      return Success(user.uid);
     } catch (e) {
-      log('Erro ao adicionar pedido: $e');
-      return '';
+      log('Erro ao fazer login: $e');
+      return Failure(Exception(e.toString()));
     }
   }
 
-  // Adicionando um item ao pedido
-  Future<String> adicionarItem({
-    required String orderId,
-    required String name,
-    required double value,
-  }) async {
+  // Logout de usuário
+  AsyncResult<Unit> logoutUser() async {
     try {
-      DocumentReference pedidoRef = _store.collection('orders').doc(orderId);
-      DocumentReference itemRef = await pedidoRef.collection('items').add({
-        'name': name,
-        'value': value,
-      });
-      log('Item adicionado com ID: ${itemRef.id}');
-      return itemRef.id;
+      await _auth.signOut();
+      log('Usuário deslogado.');
+      return const Success(unit);
     } catch (e) {
-      log('Erro ao adicionar item: $e');
-      return '';
+      log('Erro ao deslogar usuário: $e');
+      return Failure(Exception(e.toString()));
     }
   }
 
-  // Adicionando uma rachadinha ao item
-  Future<void> adicionarRachadinha({
-    required String orderId,
-    required String itemId,
-    required String name,
-    required double value,
-  }) async {
+  // Deletar usuário
+  AsyncResult<void> deleteUser() async {
     try {
-      DocumentReference itemRef = _store
-          .collection('orders')
-          .doc(orderId)
-          .collection('items')
-          .doc(itemId);
+      String userId = _auth.currentUser!.uid;
 
-      await itemRef.collection('rachadinhas').add({
-        'name': name,
-        'value': value,
-      });
+      // Apagar do Firestore
+      await _store.collection('users').doc(userId).delete();
 
-      log('Rachadinha adicionada com sucesso!');
+      // Apagar do Firebase Authentication
+      await _auth.currentUser!.delete();
+
+      log('Usuário deletado.');
+      return const Success(Unit);
     } catch (e) {
-      log('Erro ao adicionar rachadinha: $e');
+      log('Erro ao deletar usuário: $e');
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  // Buscar usuário pelo ID
+  AsyncResult<UserModel> getUserById(String userId) async {
+    try {
+      DocumentSnapshot doc = await _store.collection('users').doc(userId).get();
+      if (doc.exists) {
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        var user = UserModel.fromMap(userData);
+        return Success(user);
+      } else {
+        return Failure(Exception('Usuário não encontrado'));
+      }
+    } catch (e) {
+      log('Erro ao buscar usuário: $e');
+      return Failure(Exception(e.toString()));
     }
   }
 }

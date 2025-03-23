@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rachadinha/core/config/dependencies.dart';
 import 'package:rachadinha/main.dart';
+import 'package:rachadinha/ui/auth/viewmodels/auth_viewmodel.dart';
 import 'package:routefly/routefly.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -66,6 +68,27 @@ class HomeDrawer extends StatelessWidget {
             ),
             onTap: () {
               Routefly.push(routePaths.qrcode);
+            },
+          ),
+          const Divider(color: Colors.white),
+          ListTile(
+            title: const Row(
+              children: [
+                Icon(
+                  FontAwesomeIcons.arrowRightFromBracket,
+                  size: 24,
+                  color: Colors.white,
+                ),
+                SizedBox(width: 16),
+                Text(
+                  'Logout',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+              ],
+            ),
+            onTap: () async {
+              await injector.get<AuthViewmodel>().logout();
+              Routefly.push(routePaths.auth.login);
             },
           ),
           const Divider(color: Colors.white),

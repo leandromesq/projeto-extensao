@@ -21,7 +21,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final ctrl = injector.get<AuthViewmodel>();
 
-  final validator = CredentialsValidator();
+  final validator = LoginCredentialsValidator();
   final credentials = Credentials();
 
   @override
@@ -140,9 +140,9 @@ class _LoginPageState extends State<LoginPage> {
                                           .validate(credentials)
                                           .isValid) {
                                         ctrl.loginCommand.execute(credentials);
+                                        log('Email: ${credentials.email}');
+                                        log('Password: ${credentials.password}');
                                       }
-                                      log('Email: ${credentials.email}');
-                                      log('Password: ${credentials.password}');
                                     },
                               child: ctrl.loginCommand.isRunning
                                   ? const SizedBox(
