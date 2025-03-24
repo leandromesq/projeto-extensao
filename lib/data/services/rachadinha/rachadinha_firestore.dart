@@ -1,135 +1,221 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rachadinha/data/models/item_model.dart';
+import 'package:rachadinha/data/models/order_model.dart';
+import 'package:rachadinha/data/models/rachadinha_model.dart';
+import 'package:result_dart/result_dart.dart';
 
 class RachadinhaFirestore {
-  final FirebaseFirestore _store = FirebaseFirestore.instance;
-  final String collectionPath = "orders";
+  final FirebaseFirestore _store;
 
-  // Criar um novo pedido com itens
-  Future<void> createOrder(
-      String userID, double total, List<Map<String, dynamic>> items) async {
-    DocumentReference orderRef = await _store.collection(collectionPath).add({
-      'date': DateTime.now().toIso8601String(),
-      'total': total,
-      'userID': userID,
-    });
+  RachadinhaFirestore({FirebaseFirestore? store})
+      : _store = store ?? FirebaseFirestore.instance;
 
-    for (var item in items) {
-      await orderRef.collection("items").add(item);
-    }
-  }
-
-  // Excluir um pedido e seus itens
-  Future<void> deletOrder(String orderID) async {
-    CollectionReference itemsRef =
-        _store.collection(collectionPath).doc(orderID).collection("items");
-    QuerySnapshot itemsSnapshot = await itemsRef.get();
-
-    for (var doc in itemsSnapshot.docs) {
-      await doc.reference.delete();
-    }
-
-    await _store.collection(collectionPath).doc(orderID).delete();
-  }
-
-  // Editar um pedido (apenas o total, sem alterar os itens)
-  Future<void> editOrder(String orderID, double novoTotal) async {
-    await _store.collection(collectionPath).doc(orderID).update({
-      'total': novoTotal,
-    });
-  }
-
-  // Buscar um pedido pelo ID (incluindo itens)
-  Future<Map<String, dynamic>?> findOrder(String orderID) async {
-    DocumentSnapshot doc =
-        await _store.collection(collectionPath).doc(orderID).get();
-
-    if (doc.exists) {
-      Map<String, dynamic> pedidoData = doc.data() as Map<String, dynamic>;
-
-      // Buscar itens dentro do pedido
-      QuerySnapshot itemsSnapshot = await _store
-          .collection(collectionPath)
-          .doc(orderID)
-          .collection("items")
-          .get();
-      List<Map<String, dynamic>> items = itemsSnapshot.docs
-          .map((item) => item.data() as Map<String, dynamic>)
-          .toList();
-
-      pedidoData['items'] = items;
-      return pedidoData;
-    }
-    return null;
-  }
-
-  // Criar um novo item em uma ordem
-  Future<String> createItem(String orderId, String name, double value) async {
+  AsyncResult<String> createOrder(String userId, double total) async {
     try {
-      DocumentReference itemRef = await _store
-          .collection(collectionPath)
-          .doc(orderId)
-          .collection("items")
-          .add({
-        'name': name,
-        'value': value,
+      DocumentReference docRef = await _store.collection('orders').add({
+        'userId': userId,
+        'total': total,
+        'date': FieldValue.serverTimestamp(),
       });
-      log('Item adicionado com ID: ${itemRef.id}');
-      return itemRef.id;
+      return Success(docRef.id);
     } catch (e) {
-      log('Erro ao adicionar item: $e');
-      return '';
+      return Failure(Exception(e.toString()));
     }
   }
 
-// Excluir um item de uma ordem
-  Future<void> deleteItem(String orderId, String itemId) async {
+  AsyncResult<OrderModel> findOrderbyId(String pedidoId) async {
+    try {
+      DocumentSnapshot doc =
+          await _store.collection('orders').doc(pedidoId).get();
+      if (doc.exists) {
+        var order = doc.data() as Map<String, dynamic>;
+        return Success(OrderModel.fromMap(order));
+      } else {
+        return Failure(Exception("Pedido não encontrado"));
+      }
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<List<OrderModel>> findOrders() async {
+    try {
+      QuerySnapshot querySnapshot = await _store.collection('orders').get();
+      var orders = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+      return Success(orders.map((order) => OrderModel.fromMap(order)).toList());
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<Unit> editOrder(String pedidoId, double novoTotal) async {
     try {
       await _store
-          .collection(collectionPath)
-          .doc(orderId)
-          .collection("items")
+          .collection('orders')
+          .doc(pedidoId)
+          .update({'total': novoTotal});
+      return const Success(unit);
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<Unit> deleteOrder(String pedidoId) async {
+    try {
+      await _store.collection('orders').doc(pedidoId).delete();
+      return const Success(unit);
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<String> createItem(
+      String pedidoId, String nome, double preco) async {
+    try {
+      DocumentReference docRef = await _store
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
+          .add({
+        'nome': nome,
+        'preco': preco,
+      });
+      return Success(docRef.id);
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<ItemModel> findItembyId(String pedidoId, String itemId) async {
+    try {
+      DocumentSnapshot doc = await _store
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
+          .doc(itemId)
+          .get();
+      if (doc.exists) {
+        var item = doc.data() as Map<String, dynamic>;
+        return Success(ItemModel.fromMap(item));
+      } else {
+        return Failure(Exception("Item não encontrado"));
+      }
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<Unit> editItem(
+      String pedidoId, String itemId, String nome, double preco) async {
+    try {
+      await _store
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
+          .doc(itemId)
+          .update({
+        'nome': nome,
+        'preco': preco,
+      });
+      return const Success(unit);
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<Unit> deleteItem(String pedidoId, String itemId) async {
+    try {
+      await _store
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
           .doc(itemId)
           .delete();
+      return const Success(unit);
     } catch (e) {
-      log('Erro ao excluir item: $e');
+      return Failure(Exception(e.toString()));
     }
   }
 
-// Criar uma nova rachadinha em um item
-  Future<void> createRachadinha(
-      String orderId, String itemId, String name, double value) async {
+  AsyncResult<String> createRachadinha(
+      String pedidoId, String itemId, String nome, double conta) async {
     try {
-      await _store
-          .collection(collectionPath)
-          .doc(orderId)
-          .collection("items")
+      DocumentReference docRef = await _store
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
           .doc(itemId)
-          .collection("rachadinhas")
+          .collection('rachadinhas')
           .add({
-        'name': name,
-        'value': value,
+        'nome': nome,
+        'idPedido': pedidoId,
+        'idItem': itemId,
+        'conta': conta,
       });
+      return Success(docRef.id);
     } catch (e) {
-      log('Erro ao adicionar rachadinha: $e');
+      return Failure(Exception(e.toString()));
     }
   }
 
-// Excluir uma rachadinha de um item
-  Future<void> deleteRachadinha(
-      String orderId, String itemId, String rachadinhaId) async {
+  AsyncResult<RachadinhaModel> findRachadinhabyId(
+      String pedidoId, String itemId, String rachadinhaId) async {
+    try {
+      DocumentSnapshot doc = await _store
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
+          .doc(itemId)
+          .collection('rachadinhas')
+          .doc(rachadinhaId)
+          .get();
+      if (doc.exists) {
+        var rachadinha = doc.data() as Map<String, dynamic>;
+        return Success(RachadinhaModel.fromMap(rachadinha));
+      } else {
+        return Failure(Exception("Rachadinha não encontrada"));
+      }
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<Unit> editRachadinha(String pedidoId, String itemId,
+      String rachadinhaId, String nome, double conta) async {
     try {
       await _store
-          .collection(collectionPath)
-          .doc(orderId)
-          .collection("items")
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
           .doc(itemId)
-          .collection("rachadinhas")
+          .collection('rachadinhas')
+          .doc(rachadinhaId)
+          .update({
+        'nome': nome,
+        'conta': conta,
+      });
+      return const Success(unit);
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<Unit> deleteRachadinha(
+      String pedidoId, String itemId, String rachadinhaId) async {
+    try {
+      await _store
+          .collection('orders')
+          .doc(pedidoId)
+          .collection('items')
+          .doc(itemId)
+          .collection('rachadinhas')
           .doc(rachadinhaId)
           .delete();
+      return const Success(unit);
     } catch (e) {
-      log('Erro ao excluir rachadinha: $e');
+      return Failure(Exception(e.toString()));
     }
   }
 }

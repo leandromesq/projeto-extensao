@@ -2,10 +2,14 @@ import 'package:auto_injector/auto_injector.dart';
 import 'package:dio/dio.dart';
 import 'package:rachadinha/data/repositories/auth/auth_repository.dart';
 import 'package:rachadinha/data/repositories/auth/auth_repository_impl.dart';
+import 'package:rachadinha/data/repositories/rachadinha/rachadinha_repository.dart';
+import 'package:rachadinha/data/repositories/rachadinha/rachadinha_repository_impl.dart';
 import 'package:rachadinha/data/services/auth/auth_firestore.dart';
 import 'package:rachadinha/data/services/auth/auth_local_storage.dart';
 import 'package:rachadinha/data/services/local_storage.dart';
+import 'package:rachadinha/data/services/rachadinha/rachadinha_firestore.dart';
 import 'package:rachadinha/ui/auth/viewmodels/auth_viewmodel.dart';
+import 'package:rachadinha/ui/home/viewmodels/home_viewmodel.dart';
 
 final injector = AutoInjector();
 
@@ -20,11 +24,14 @@ void setupInjection() {
   injector.addSingleton(AuthLocalStorage.new);
   injector.addSingleton(AuthFirestore.new);
   injector.addSingleton<AuthRepository>(AuthRepositoryImpl.new);
+  injector.addSingleton(RachadinhaFirestore.new);
+  injector.addSingleton<RachadinhaRepository>(RachadinhaRepositoryImpl.new);
 
   //domain
 
   //ui
   injector.addSingleton(AuthViewmodel.new);
+  injector.addSingleton(HomeViewmodel.new);
 
   injector.commit();
 }
