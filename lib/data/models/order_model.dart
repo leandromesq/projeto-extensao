@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:rachadinha/data/models/item_model.dart';
 
 class OrderModel {
-  final String id;
-  final String userId;
-  final double total;
-  final DateTime date;
-  final List<ItemModel> items;
+  String id;
+  String userId;
+  double total;
+  DateTime date;
+  List<ItemModel> items;
   OrderModel({
     required this.id,
     required this.userId,
@@ -73,4 +73,12 @@ class OrderModel {
   int get hashCode {
     return id.hashCode ^ userId.hashCode ^ total.hashCode ^ date.hashCode;
   }
+
+  static final empty = OrderModel(
+    id: '',
+    userId: '',
+    total: 0.0,
+    date: DateTime.now(),
+    items: [],
+  );
 }

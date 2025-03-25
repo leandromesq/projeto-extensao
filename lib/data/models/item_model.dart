@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:rachadinha/data/models/rachadinha_model.dart';
 
 class ItemModel {
-  final String id;
-  final String name;
-  final String orderId;
-  final double price;
-  final List<RachadinhaModel> rachadinhas;
+  String id;
+  String name;
+  String orderId;
+  double price;
+  List<RachadinhaModel> rachadinhas;
   ItemModel({
     required this.id,
     required this.name,
@@ -73,4 +73,12 @@ class ItemModel {
   int get hashCode {
     return id.hashCode ^ name.hashCode ^ orderId.hashCode ^ price.hashCode;
   }
+
+  static final empty = ItemModel(
+    id: '',
+    name: '',
+    orderId: '',
+    price: 0.0,
+    rachadinhas: [],
+  );
 }

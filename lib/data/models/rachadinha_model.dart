@@ -1,15 +1,17 @@
 import 'dart:convert';
 
 class RachadinhaModel {
-  final String id;
-  final String name;
-  final String itemId;
-  final double price;
+  String id;
+  String name;
+  String itemId;
+  double price;
+  bool active;
   RachadinhaModel({
     required this.id,
     required this.name,
     required this.itemId,
     required this.price,
+    required this.active,
   });
 
   RachadinhaModel copyWith({
@@ -17,12 +19,14 @@ class RachadinhaModel {
     String? name,
     String? itemId,
     double? price,
+    bool? active,
   }) {
     return RachadinhaModel(
       id: id ?? this.id,
       name: name ?? this.name,
       itemId: itemId ?? this.itemId,
       price: price ?? this.price,
+      active: active ?? this.active,
     );
   }
 
@@ -32,6 +36,7 @@ class RachadinhaModel {
       'name': name,
       'itemId': itemId,
       'price': price,
+      'active': active,
     };
   }
 
@@ -41,6 +46,7 @@ class RachadinhaModel {
       name: map['name'] ?? '',
       itemId: map['itemId'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
+      active: map['active'] ?? false,
     );
   }
 
@@ -51,7 +57,7 @@ class RachadinhaModel {
 
   @override
   String toString() {
-    return 'RachadinhaModel(id: $id, name: $name, itemId: $itemId, price: $price)';
+    return 'RachadinhaModel(id: $id, name: $name, itemId: $itemId, price: $price, active: $active)';
   }
 
   @override
@@ -62,11 +68,24 @@ class RachadinhaModel {
         other.id == id &&
         other.name == name &&
         other.itemId == itemId &&
-        other.price == price;
+        other.price == price &&
+        other.active == active;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ itemId.hashCode ^ price.hashCode;
+    return id.hashCode ^
+        name.hashCode ^
+        itemId.hashCode ^
+        price.hashCode ^
+        active.hashCode;
   }
+
+  static final empty = RachadinhaModel(
+    id: '',
+    name: '',
+    itemId: '',
+    price: 0,
+    active: false,
+  );
 }
