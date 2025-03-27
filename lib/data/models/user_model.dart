@@ -50,7 +50,7 @@ class UserModel {
       id: map['id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
-      birthDate: DateTime.fromMillisecondsSinceEpoch(map['birthDate']),
+      birthDate: DateTime.parse(map['birthDate']),
       profilepic: map['profilepic'] ?? '',
       qrcode: map['qrcode'] ?? '',
     );

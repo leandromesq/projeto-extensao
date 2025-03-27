@@ -10,4 +10,14 @@ class HomeViewmodel extends ChangeNotifier {
   OrderModel order = OrderModel.empty;
   ItemModel item = ItemModel.empty;
   RachadinhaModel rachadinha = RachadinhaModel.empty;
+
+  toggleRachadinha(RachadinhaModel rachadinha) async {
+    rachadinha.active = !rachadinha.active;
+    notifyListeners();
+  }
+
+  addRachadinhaField() {
+    item.rachadinhas.add(RachadinhaModel.empty);
+    notifyListeners();
+  }
 }
