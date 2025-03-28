@@ -7,6 +7,7 @@ class RachadinhaModel {
   double price;
   bool active;
   String appid;
+  String itemName;
   RachadinhaModel({
     this.id = '',
     this.name = '',
@@ -14,6 +15,7 @@ class RachadinhaModel {
     this.price = 0.0,
     this.active = false,
     this.appid = '',
+    this.itemName = '',
   });
 
   RachadinhaModel copyWith({
@@ -23,6 +25,7 @@ class RachadinhaModel {
     double? price,
     bool? active,
     String? appid,
+    String? itemName,
   }) {
     return RachadinhaModel(
       id: id ?? this.id,
@@ -31,6 +34,7 @@ class RachadinhaModel {
       price: price ?? this.price,
       active: active ?? this.active,
       appid: appid ?? this.appid,
+      itemName: itemName ?? this.itemName,
     );
   }
 
@@ -42,6 +46,7 @@ class RachadinhaModel {
       'price': price,
       'active': active,
       'appid': appid,
+      'itemName': itemName,
     };
   }
 
@@ -53,6 +58,7 @@ class RachadinhaModel {
       price: map['price']?.toDouble() ?? 0.0,
       active: map['active'] ?? false,
       appid: map['appid'] ?? '',
+      itemName: map['itemName'] ?? '',
     );
   }
 
@@ -63,7 +69,7 @@ class RachadinhaModel {
 
   @override
   String toString() {
-    return 'RachadinhaModel(id: $id, name: $name, itemId: $itemId, price: $price, active: $active, appid: $appid)';
+    return 'RachadinhaModel(id: $id, name: $name, itemId: $itemId, itemName: $itemName, price: $price, active: $active, appid: $appid)';
   }
 
   @override
@@ -76,7 +82,8 @@ class RachadinhaModel {
         other.itemId == itemId &&
         other.price == price &&
         other.active == active &&
-        other.appid == appid;
+        other.appid == appid &&
+        other.itemName == itemName;
   }
 
   @override
@@ -86,6 +93,7 @@ class RachadinhaModel {
         itemId.hashCode ^
         price.hashCode ^
         active.hashCode ^
-        appid.hashCode;
+        appid.hashCode ^
+        itemName.hashCode;
   }
 }

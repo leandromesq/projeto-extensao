@@ -87,7 +87,7 @@ class HomeDrawer extends StatelessWidget {
               ],
             ),
             onTap: () async {
-              await injector.get<AuthViewmodel>().logout();
+              await injector.get<AuthViewModel>().logout();
               Routefly.push(routePaths.auth.login);
             },
           ),

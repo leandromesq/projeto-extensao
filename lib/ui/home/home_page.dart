@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var ctrl = injector.get<HomeViewmodel>();
+  var ctrl = injector.get<HomeViewModel>();
   String? hintText = 'ITEM';
 
   final money = NumberFormat("##,##0.00", "pt_BR");

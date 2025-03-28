@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:rachadinha/core/config/dependencies.dart';
 import 'package:rachadinha/core/utils/extensions/theme_context_extensions.dart';
 import 'package:rachadinha/data/models/rachadinha_model.dart';
 import 'package:rachadinha/ui/home/viewmodels/home_viewmodel.dart';
+import 'package:rachadinha/ui/home/widgets/receipt_dialog.dart';
 
 class RachadinhaItem extends StatefulWidget {
   final RachadinhaModel rachadinhaModel;
@@ -14,7 +16,7 @@ class RachadinhaItem extends StatefulWidget {
 }
 
 class _RachadinhaItemState extends State<RachadinhaItem> {
-  var ctrl = injector.get<HomeViewmodel>();
+  var ctrl = injector.get<HomeViewModel>();
   @override
   Widget build(BuildContext context) {
     final money = NumberFormat("##,##0.00", "pt_BR");
@@ -68,27 +70,40 @@ class _RachadinhaItemState extends State<RachadinhaItem> {
                       rachadinha.name = value;
                     },
                   )),
-              const SizedBox(width: 8),
-              Transform.flip(
-                flipX: true,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.receipt_long_rounded,
-                    color: context.colors.primarygreen,
-                    size: 34,
+              SpeedDial(
+                icon: Icons.more_horiz,
+                iconTheme: const IconThemeData(size: 36),
+                buttonSize: const Size(48, 48),
+                activeIcon: Icons.close,
+                backgroundColor: Colors.transparent,
+                foregroundColor: context.colors.primarygreen,
+                elevation: 0,
+                spacing: 10,
+                children: [
+                  SpeedDialChild(
+                    child: const Icon(Icons.delete, color: Colors.white),
+                    backgroundColor: Colors.red,
+                    label: 'Excluir',
+                    labelStyle: const TextStyle(fontSize: 16),
+                    onTap: () {
+                      ctrl.removeRachadinha(rachadinha);
+                    },
                   ),
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    iconSize: 40,
-                    padding: EdgeInsets.zero,
+                  SpeedDialChild(
+                    child: const Icon(Icons.receipt_long_rounded,
+                        color: Colors.white),
+                    backgroundColor: context.colors.primarygreen,
+                    label: 'Visualizar',
+                    labelStyle: const TextStyle(fontSize: 16),
+                    onTap: () {
+                      ctrl.loadPersonRachadinhas(rachadinha.name);
+                      showDialog(
+                        context: context,
+                        builder: (context) => const ReceiptDialog(),
+                      );
+                    },
                   ),
-                  onPressed: () {
-                    ctrl.removeRachadinha(rachadinha);
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (context) => const ReceiptDialog());
-                  },
-                ),
+                ],
               )
             ],
           ),

@@ -21,7 +21,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final ctrl = injector.get<AuthViewmodel>();
+  final ctrl = injector.get<AuthViewModel>();
   var dateFormat = DateFormat('dd/MM/yyyy');
   var dateController = TextEditingController();
 

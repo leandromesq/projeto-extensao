@@ -19,7 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final ctrl = injector.get<AuthViewmodel>();
+  final ctrl = injector.get<AuthViewModel>();
 
   final validator = LoginCredentialsValidator();
   final credentials = Credentials();
@@ -27,7 +27,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    checkSavedLogin();
     ctrl.loginCommand.addListener(_listenable);
+  }
+
+  Future<void> checkSavedLogin() async {
+    var savedUid = await ctrl.getSavedUID();
+
+    if (savedUid != null && savedUid.isNotEmpty) {
+      log('Login automático com UID: $savedUid');
+      Routefly.navigate(routePaths.home);
+    }
   }
 
   void _listenable() {

@@ -30,8 +30,8 @@ void setupInjection() {
   //domain
 
   //ui
-  injector.addSingleton(AuthViewmodel.new);
-  injector.addSingleton(HomeViewmodel.new);
+  injector.addSingleton(AuthViewModel.new);
+  injector.addSingleton(HomeViewModel.new);
 
   injector.commit();
 }

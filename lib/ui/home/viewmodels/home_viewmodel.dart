@@ -8,9 +8,9 @@ import 'package:rachadinha/data/models/rachadinha_model.dart';
 import 'package:rachadinha/data/repositories/rachadinha/rachadinha_repository.dart';
 import 'package:rachadinha/core/widgets/fading_error_dialog.dart';
 
-class HomeViewmodel extends ChangeNotifier {
+class HomeViewModel extends ChangeNotifier {
   final RachadinhaRepository repo;
-  HomeViewmodel(this.repo);
+  HomeViewModel(this.repo);
   final CurrencyTextInputFormatter moneyFormatter =
       CurrencyTextInputFormatter.currency(symbol: '', locale: 'pt-BR');
   OrderModel order = OrderModel();
@@ -46,6 +46,7 @@ class HomeViewmodel extends ChangeNotifier {
     // Atribui o valor a cada pessoa selecionada
     for (var rachadinha in selectedPeople) {
       rachadinha.price = share;
+      rachadinha.itemName = item.name;
     }
 
     // Se houver um acumulador de total na ordem, atualiza-o
@@ -123,6 +124,22 @@ class HomeViewmodel extends ChangeNotifier {
     priceController.clear();
     log('Pedido finalizado');
     notifyListeners();
+  }
+
+  List<RachadinhaModel> personRachadinhas = [];
+  double personTotal = 0.0;
+  loadPersonRachadinhas(String name) {
+    personRachadinhas = [];
+    personTotal = 0.0;
+    for (var item in order.items) {
+      var personRachadinha = item.rachadinhas.firstWhere((r) => r.name == name);
+      if (personRachadinha.price != 0) {
+        personRachadinhas.add(personRachadinha);
+      }
+      var itemPrice = personRachadinha.price;
+      personTotal += itemPrice;
+      log('personTotal rachadinha: ${personRachadinha.toString()} - $itemPrice');
+    }
   }
 
   showFadingErrorPopup(

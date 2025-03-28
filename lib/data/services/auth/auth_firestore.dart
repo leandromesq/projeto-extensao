@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rachadinha/data/models/user_model.dart';
 import 'package:result_dart/result_dart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthFirestore {
   final FirebaseFirestore _store;
@@ -64,8 +65,18 @@ class AuthFirestore {
       log('Usuário logado com sucesso!');
 
       User? user = userCredential.user;
-      log('UID: ${user!.uid}');
-      return Success(user.uid);
+      if (user != null) {
+        String uid = user.uid;
+        log('UID: $uid');
+
+        // Salva o UID no SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_uid', uid);
+
+        return Success(uid);
+      } else {
+        return Failure(Exception("Usuário não encontrado."));
+      }
     } catch (e) {
       log('Erro ao fazer login: $e');
       return Failure(Exception(e.toString()));
@@ -77,6 +88,9 @@ class AuthFirestore {
     try {
       await _auth.signOut();
       log('Usuário deslogado.');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('user_uid');
+      log('Usuário deslogado e UID removido.');
       return const Success(unit);
     } catch (e) {
       log('Erro ao deslogar usuário: $e');
