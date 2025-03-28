@@ -6,15 +6,15 @@ class OrderModel {
   String id;
   String userId;
   double total;
-  DateTime date;
+  DateTime? date;
   List<ItemModel> items;
   OrderModel({
-    required this.id,
-    required this.userId,
-    required this.total,
-    required this.date,
-    this.items = const [],
-  });
+    this.id = '',
+    this.userId = '',
+    this.total = 0.0,
+    this.date,
+    List<ItemModel>? items,
+  }) : items = items ?? [];
 
   OrderModel copyWith({
     String? id,
@@ -35,7 +35,7 @@ class OrderModel {
       'id': id,
       'userId': userId,
       'total': total,
-      'date': date.millisecondsSinceEpoch,
+      'date': date,
     };
   }
 
@@ -44,7 +44,7 @@ class OrderModel {
       id: map['id'] ?? '',
       userId: map['userId'] ?? '',
       total: map['total']?.toDouble() ?? 0.0,
-      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
+      date: map['date'],
     );
   }
 
@@ -73,12 +73,4 @@ class OrderModel {
   int get hashCode {
     return id.hashCode ^ userId.hashCode ^ total.hashCode ^ date.hashCode;
   }
-
-  static final empty = OrderModel(
-    id: '',
-    userId: '',
-    total: 0.0,
-    date: DateTime.now(),
-    items: [],
-  );
 }

@@ -7,26 +7,33 @@ class ItemModel {
   String name;
   String orderId;
   double price;
+  String appid;
   List<RachadinhaModel> rachadinhas;
   ItemModel({
-    required this.id,
-    required this.name,
-    required this.orderId,
-    required this.price,
-    this.rachadinhas = const [],
-  });
+    this.id = '',
+    this.name = '',
+    this.orderId = '',
+    this.price = 0,
+    List<RachadinhaModel>? rachadinhas,
+    this.appid = '',
+  }) : rachadinhas = rachadinhas ?? [];
 
   ItemModel copyWith({
     String? id,
     String? name,
     String? orderId,
     double? price,
+    int? parts,
+    List<RachadinhaModel>? rachadinhas,
+    String? appid,
   }) {
     return ItemModel(
       id: id ?? this.id,
       name: name ?? this.name,
       orderId: orderId ?? this.orderId,
       price: price ?? this.price,
+      rachadinhas: rachadinhas ?? this.rachadinhas,
+      appid: appid ?? this.appid,
     );
   }
 
@@ -55,7 +62,7 @@ class ItemModel {
 
   @override
   String toString() {
-    return 'ItemModel(id: $id, name: $name, orderId: $orderId, price: $price)';
+    return 'ItemModel(id: $id, name: $name, orderId: $orderId, price: $price, rachadinhas: $rachadinhas, appid: $appid)';
   }
 
   @override
@@ -66,19 +73,16 @@ class ItemModel {
         other.id == id &&
         other.name == name &&
         other.orderId == orderId &&
-        other.price == price;
+        other.price == price &&
+        other.appid == appid;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ orderId.hashCode ^ price.hashCode;
+    return id.hashCode ^
+        name.hashCode ^
+        orderId.hashCode ^
+        price.hashCode ^
+        appid.hashCode;
   }
-
-  static final empty = ItemModel(
-    id: '',
-    name: '',
-    orderId: '',
-    price: 0.0,
-    rachadinhas: [],
-  );
 }

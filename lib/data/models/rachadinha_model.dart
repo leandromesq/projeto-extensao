@@ -6,12 +6,14 @@ class RachadinhaModel {
   String itemId;
   double price;
   bool active;
+  String appid;
   RachadinhaModel({
-    required this.id,
-    required this.name,
-    required this.itemId,
-    required this.price,
-    required this.active,
+    this.id = '',
+    this.name = '',
+    this.itemId = '',
+    this.price = 0.0,
+    this.active = false,
+    this.appid = '',
   });
 
   RachadinhaModel copyWith({
@@ -20,6 +22,7 @@ class RachadinhaModel {
     String? itemId,
     double? price,
     bool? active,
+    String? appid,
   }) {
     return RachadinhaModel(
       id: id ?? this.id,
@@ -27,6 +30,7 @@ class RachadinhaModel {
       itemId: itemId ?? this.itemId,
       price: price ?? this.price,
       active: active ?? this.active,
+      appid: appid ?? this.appid,
     );
   }
 
@@ -37,6 +41,7 @@ class RachadinhaModel {
       'itemId': itemId,
       'price': price,
       'active': active,
+      'appid': appid,
     };
   }
 
@@ -47,6 +52,7 @@ class RachadinhaModel {
       itemId: map['itemId'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       active: map['active'] ?? false,
+      appid: map['appid'] ?? '',
     );
   }
 
@@ -57,7 +63,7 @@ class RachadinhaModel {
 
   @override
   String toString() {
-    return 'RachadinhaModel(id: $id, name: $name, itemId: $itemId, price: $price, active: $active)';
+    return 'RachadinhaModel(id: $id, name: $name, itemId: $itemId, price: $price, active: $active, appid: $appid)';
   }
 
   @override
@@ -69,7 +75,8 @@ class RachadinhaModel {
         other.name == name &&
         other.itemId == itemId &&
         other.price == price &&
-        other.active == active;
+        other.active == active &&
+        other.appid == appid;
   }
 
   @override
@@ -78,14 +85,7 @@ class RachadinhaModel {
         name.hashCode ^
         itemId.hashCode ^
         price.hashCode ^
-        active.hashCode;
+        active.hashCode ^
+        appid.hashCode;
   }
-
-  static final empty = RachadinhaModel(
-    id: '',
-    name: '',
-    itemId: '',
-    price: 0,
-    active: false,
-  );
 }

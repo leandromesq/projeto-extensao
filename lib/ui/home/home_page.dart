@@ -1,4 +1,3 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rachadinha/core/config/dependencies.dart';
@@ -7,7 +6,7 @@ import 'package:rachadinha/core/utils/extensions/theme_context_extensions.dart';
 import 'package:rachadinha/ui/home/viewmodels/home_viewmodel.dart';
 import 'package:rachadinha/ui/home/widgets/home_app_bar.dart';
 import 'package:rachadinha/ui/home/widgets/home_drawer.dart';
-import 'package:rachadinha/ui/home/widgets/receipt_dialog.dart';
+import 'package:rachadinha/ui/home/widgets/rachadinha_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,8 +18,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var ctrl = injector.get<HomeViewmodel>();
   String? hintText = 'ITEM';
-  final CurrencyTextInputFormatter moneyFormatter =
-      CurrencyTextInputFormatter.currency(symbol: '', locale: 'pt-BR');
+
+  final money = NumberFormat("##,##0.00", "pt_BR");
 
   @override
   void initState() {
@@ -29,7 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var order = ctrl.order;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -45,6 +43,7 @@ class _HomePageState extends State<HomePage> {
           child: ListenableBuilder(
               listenable: ctrl,
               builder: (context, _) {
+                var item = ctrl.item;
                 return SizedBox(
                   child: Column(
                     children: [
@@ -60,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(
                                 width: 250,
                                 height: 80,
-                                child: TextField(
+                                child: TextFormField(
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                       fontSize: 42,
@@ -76,9 +75,8 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  onChanged: (value) {
-                                    ctrl.item.name = value;
-                                  },
+                                  controller: ctrl.nameController,
+                                  onChanged: ctrl.updateItemName,
                                   onTap: () {
                                     setState(() {
                                       hintText = null;
@@ -103,36 +101,36 @@ class _HomePageState extends State<HomePage> {
                                       height: 60,
                                       width: 150,
                                       child: TextFormField(
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [moneyFormatter],
-                                        textAlign: TextAlign.center,
-                                        textAlignVertical:
-                                            TextAlignVertical.top,
-                                        style: const TextStyle(
-                                            fontSize: 36,
-                                            fontWeight: FontWeight.w500),
-                                        cursorHeight: 36,
-                                        decoration: InputDecoration(
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color:
-                                                    context.colors.primarygreen,
-                                                width: 2.0,
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [
+                                            ctrl.moneyFormatter
+                                          ],
+                                          textAlign: TextAlign.center,
+                                          textAlignVertical:
+                                              TextAlignVertical.top,
+                                          style: const TextStyle(
+                                              fontSize: 36,
+                                              fontWeight: FontWeight.w500),
+                                          cursorHeight: 36,
+                                          decoration: InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: context
+                                                      .colors.primarygreen,
+                                                  width: 2.0,
+                                                ),
                                               ),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                color:
-                                                    context.colors.primarygreen,
-                                                width: 2.0,
-                                              ),
-                                            )),
-                                        onChanged: (value) {
-                                          ctrl.item.price = moneyFormatter
-                                              .getUnformattedValue()
-                                              .toDouble();
-                                        },
-                                      )),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: context
+                                                      .colors.primarygreen,
+                                                  width: 2.0,
+                                                ),
+                                              )),
+                                          controller: ctrl.priceController,
+                                          onChanged: (value) {
+                                            ctrl.updateItemPrice();
+                                          })),
                                   IconButton(
                                     icon: const Icon(
                                       Icons.add,
@@ -144,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                       padding: EdgeInsets.zero,
                                     ),
                                     onPressed: () {
-                                      order.items.add(ctrl.item);
+                                      ctrl.addItem(context);
                                     },
                                   )
                                 ],
@@ -156,12 +154,13 @@ class _HomePageState extends State<HomePage> {
                                       const BoxConstraints(maxHeight: 240),
                                   child: ListView.separated(
                                     shrinkWrap: true,
-                                    itemCount: ctrl.item.rachadinhas.length,
+                                    itemCount: item.rachadinhas.length,
                                     separatorBuilder: (context, index) =>
                                         const SizedBox(height: 8),
                                     itemBuilder: (context, index) =>
-                                        RachadinhaWidget(
-                                            ctrl: ctrl, index: index),
+                                        RachadinhaItem(
+                                            rachadinhaModel:
+                                                item.rachadinhas[index]),
                                   ),
                                 ),
                               ),
@@ -193,7 +192,9 @@ class _HomePageState extends State<HomePage> {
                                 width: double.maxFinite,
                                 height: 80,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    ctrl.finishOrder();
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: context.colors.darkgreen,
                                     iconSize: 34,
@@ -208,7 +209,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              Text('Total: R\$ 0,00',
+                              Text(
+                                  'Total: R\$ ${money.format(ctrl.order.total)}',
                                   style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w500,
@@ -222,101 +224,6 @@ class _HomePageState extends State<HomePage> {
                 );
               }),
         ),
-      ),
-    );
-  }
-}
-
-class RachadinhaWidget extends StatelessWidget {
-  final HomeViewmodel ctrl;
-  final int index;
-  const RachadinhaWidget({
-    super.key,
-    required this.ctrl,
-    required this.index,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    var rachadinha = ctrl.item.rachadinhas[index];
-    return SizedBox(
-      width: 300,
-      height: 88,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 24,
-                height: 24,
-                child: Checkbox(
-                  visualDensity: VisualDensity.comfortable,
-                  side: BorderSide(
-                    color: context.colors.darkgreen,
-                    width: 2.0,
-                  ),
-                  value: rachadinha.active,
-                  onChanged: (value) async {
-                    ctrl.toggleRachadinha(rachadinha);
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              SizedBox(
-                  height: 40,
-                  width: 176,
-                  child: TextFormField(
-                    textAlignVertical: TextAlignVertical.top,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w500),
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: context.colors.primarygreen,
-                            width: 2.0,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: context.colors.primarygreen,
-                            width: 2.0,
-                          ),
-                        )),
-                    onChanged: (value) {
-                      rachadinha.name = value;
-                    },
-                  )),
-              const SizedBox(width: 8),
-              Transform.flip(
-                flipX: true,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.receipt_long_rounded,
-                    color: context.colors.primarygreen,
-                    size: 34,
-                  ),
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    iconSize: 40,
-                    padding: EdgeInsets.zero,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => const ReceiptDialog());
-                  },
-                ),
-              )
-            ],
-          ),
-          Text('Total: R\$ 0,00',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: context.colors.black)),
-        ],
       ),
     );
   }
