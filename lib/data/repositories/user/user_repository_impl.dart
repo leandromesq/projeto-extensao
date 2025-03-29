@@ -8,9 +8,8 @@ class UserRepositoryImpl implements UserRepository {
   final UserFirestore _store;
 
   @override
-  AsyncResult<void> editUser(
-      String userId, String? name, String? email, String? qrcode) {
-    return _store.editUser(userId, name, email, qrcode);
+  AsyncResult<void> editUser(UserModel user) {
+    return _store.editUser(user.id, user.name, user.email, user.qrcode);
   }
 
   @override

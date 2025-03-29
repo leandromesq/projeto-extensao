@@ -15,6 +15,7 @@ class UserFirestore {
       if (doc.exists) {
         Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
         var user = UserModel.fromMap(userData);
+        user.id = doc.id;
         return Success(user);
       } else {
         return Failure(Exception('Usuário não encontrado'));
@@ -28,7 +29,15 @@ class UserFirestore {
   AsyncResult<Unit> editUser(
       String userId, String? name, String? email, String? qrcode) async {
     try {
-      await _store.collection('users').doc(userId).update({'qrcode': ''});
+      if (userId.isEmpty) {
+        log('ID do usuário inválido.');
+      }
+
+      await _store.collection('users').doc(userId).update({
+        if (name != null) 'name': name,
+        if (email != null) 'email': email,
+        if (qrcode != null) 'qrcode': qrcode,
+      });
       log('Usuário atualizado com sucesso: $userId');
       return const Success(unit);
     } catch (e) {

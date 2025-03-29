@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 class UserModel {
-  final String id;
-  final String name;
-  final String email;
-  final DateTime birthDate;
-  final String profilepic;
-  final String qrcode;
+  String id;
+  String name;
+  String email;
+  DateTime birthDate;
+  String profilepic;
+  String qrcode;
   UserModel({
     required this.id,
     required this.name,
