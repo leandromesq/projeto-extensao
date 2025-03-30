@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rachadinha/core/config/dependencies.dart';
 import 'package:rachadinha/core/utils/extensions/screen_extensions.dart';
@@ -52,15 +51,13 @@ class _QRCodePageState extends State<QRCodePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              Icon(
-                FontAwesomeIcons.moneyBillTransfer,
-                color: context.colors.white,
-                size: 38,
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Image.asset(
+              'assets/white_logo.png',
+              width: 120,
+              height: 60,
+            ),
           ),
         ),
       ),

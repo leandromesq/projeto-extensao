@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rachadinha/core/config/dependencies.dart';
 import 'package:rachadinha/core/utils/extensions/theme_context_extensions.dart';
@@ -46,7 +45,8 @@ class _LoginPageState extends State<LoginPage> {
     }
     if (ctrl.loginCommand.isFailure) {
       final error = ctrl.loginCommand.value as FailureCommand;
-      final snackBar = SnackBar(content: Text(error.error.toString()));
+      final snackBar = SnackBar(
+          content: Text(error.error.toString().replaceAll('Exception: ', '')));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -79,8 +79,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       )),
                   const SizedBox(height: 10),
-                  Icon(FontAwesomeIcons.moneyBillTransfer,
-                      size: 64, color: context.colors.light),
+                  Image.asset(
+                    'assets/white_logo.png',
+                    width: 150,
+                    height: 75,
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

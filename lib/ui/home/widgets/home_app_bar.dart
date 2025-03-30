@@ -11,15 +11,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-            Icon(
-              FontAwesomeIcons.moneyBillTransfer,
-              color: context.colors.primarygreen,
-              size: 38,
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Image.asset(
+            'assets/green_logo.png',
+            width: 120,
+            height: 60,
+          ),
         ),
       ),
       leading: IconButton(

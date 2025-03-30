@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rachadinha/core/config/dependencies.dart';
@@ -40,7 +39,8 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     if (ctrl.registerCommand.isFailure) {
       final error = ctrl.registerCommand.value as FailureCommand;
-      final snackBar = SnackBar(content: Text(error.error.toString()));
+      final snackBar = SnackBar(
+          content: Text(error.error.toString().replaceAll('Exception: ', '')));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -80,8 +80,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           )),
                       const SizedBox(height: 10),
-                      Icon(FontAwesomeIcons.moneyBillTransfer,
-                          size: 64, color: context.colors.light),
+                      Image.asset(
+                        'assets/white_logo.png',
+                        width: 150,
+                        height: 75,
+                      ),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
