@@ -48,6 +48,12 @@ class AuthFirestore {
         profilepic: '',
         qrcode: '',
       ));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'auth/email-already-in-use') {
+        return Failure(Exception('E-mail ja cadastrado.'));
+      }
+      log('Erro ao criar usuário: $e');
+      return Failure(Exception(e.toString()));
     } catch (e) {
       log('Erro ao criar usuário: $e');
       return Failure(Exception(e.toString()));
@@ -77,7 +83,10 @@ class AuthFirestore {
       } else {
         return Failure(Exception("Usuário não encontrado."));
       }
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'auth/invalid-credential') {
+        return Failure(Exception('Usuário ou senha inválidos.'));
+      }
       log('Erro ao fazer login: $e');
       return Failure(Exception(e.toString()));
     }
