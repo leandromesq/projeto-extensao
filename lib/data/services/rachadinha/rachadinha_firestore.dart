@@ -10,23 +10,28 @@ class RachadinhaFirestore {
   RachadinhaFirestore({FirebaseFirestore? store})
       : _store = store ?? FirebaseFirestore.instance;
 
-  AsyncResult<String> createOrder(String userId, double total) async {
+  AsyncResult<OrderModel> createOrder(
+      {required String userId,
+      required double total,
+      required DateTime date}) async {
     try {
       DocumentReference docRef = await _store.collection('orders').add({
         'userId': userId,
         'total': total,
-        'date': FieldValue.serverTimestamp(),
+        'date': date.toString(),
       });
-      return Success(docRef.id);
+      var order =
+          OrderModel(id: docRef.id, userId: userId, total: total, date: date);
+      return Success(order);
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
   }
 
-  AsyncResult<OrderModel> findOrderbyId(String pedidoId) async {
+  AsyncResult<OrderModel> findOrderbyId(String orderId) async {
     try {
       DocumentSnapshot doc =
-          await _store.collection('orders').doc(pedidoId).get();
+          await _store.collection('orders').doc(orderId).get();
       if (doc.exists) {
         var order = doc.data() as Map<String, dynamic>;
         return Success(OrderModel.fromMap(order));
@@ -50,49 +55,56 @@ class RachadinhaFirestore {
     }
   }
 
-  AsyncResult<Unit> editOrder(String pedidoId, double novoTotal) async {
+  AsyncResult<Unit> editOrder(String orderId, double total) async {
     try {
-      await _store
-          .collection('orders')
-          .doc(pedidoId)
-          .update({'total': novoTotal});
+      await _store.collection('orders').doc(orderId).update({'total': total});
       return const Success(unit);
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
   }
 
-  AsyncResult<Unit> deleteOrder(String pedidoId) async {
+  AsyncResult<Unit> deleteOrder(String orderId) async {
     try {
-      await _store.collection('orders').doc(pedidoId).delete();
+      await _store.collection('orders').doc(orderId).delete();
       return const Success(unit);
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
   }
 
-  AsyncResult<String> createItem(
-      String pedidoId, String nome, double preco) async {
+  AsyncResult<ItemModel> createItem(
+      {required String name,
+      required double price,
+      required String orderId,
+      required String appid}) async {
     try {
       DocumentReference docRef = await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .add({
-        'nome': nome,
-        'preco': preco,
+        'name': name,
+        'price': price,
+        'order_id': orderId,
+        'appid': appid,
       });
-      return Success(docRef.id);
+      return Success(ItemModel(
+          id: docRef.id,
+          name: name,
+          orderId: orderId,
+          price: price,
+          appid: appid));
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
   }
 
-  AsyncResult<ItemModel> findItembyId(String pedidoId, String itemId) async {
+  AsyncResult<ItemModel> findItembyId(String orderId, String itemId) async {
     try {
       DocumentSnapshot doc = await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .doc(itemId)
           .get();
@@ -108,16 +120,16 @@ class RachadinhaFirestore {
   }
 
   AsyncResult<Unit> editItem(
-      String pedidoId, String itemId, String nome, double preco) async {
+      String orderId, String itemId, String name, double price) async {
     try {
       await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .doc(itemId)
           .update({
-        'nome': nome,
-        'preco': preco,
+        'name': name,
+        'price': price,
       });
       return const Success(unit);
     } catch (e) {
@@ -125,11 +137,11 @@ class RachadinhaFirestore {
     }
   }
 
-  AsyncResult<Unit> deleteItem(String pedidoId, String itemId) async {
+  AsyncResult<Unit> deleteItem(String orderId, String itemId) async {
     try {
       await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .doc(itemId)
           .delete();
@@ -139,33 +151,47 @@ class RachadinhaFirestore {
     }
   }
 
-  AsyncResult<String> createRachadinha(
-      String pedidoId, String itemId, String nome, double conta) async {
+  AsyncResult<RachadinhaModel> createRachadinha(
+      {required String orderId,
+      required String itemId,
+      required String name,
+      required double price,
+      required String itemName,
+      required String appid}) async {
     try {
       DocumentReference docRef = await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .doc(itemId)
           .collection('rachadinhas')
           .add({
-        'nome': nome,
-        'idPedido': pedidoId,
-        'idItem': itemId,
-        'conta': conta,
+        'name': name,
+        'order_id': orderId,
+        'item_id': itemId,
+        'price': price,
+        'item_name': itemName,
+        'appid': appid,
       });
-      return Success(docRef.id);
+      return Success(RachadinhaModel(
+        id: docRef.id,
+        name: name,
+        itemId: itemId,
+        price: price,
+        itemName: itemName,
+        appid: appid,
+      ));
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
   }
 
   AsyncResult<RachadinhaModel> findRachadinhabyId(
-      String pedidoId, String itemId, String rachadinhaId) async {
+      String orderId, String itemId, String rachadinhaId) async {
     try {
       DocumentSnapshot doc = await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .doc(itemId)
           .collection('rachadinhas')
@@ -182,19 +208,19 @@ class RachadinhaFirestore {
     }
   }
 
-  AsyncResult<Unit> editRachadinha(String pedidoId, String itemId,
-      String rachadinhaId, String nome, double conta) async {
+  AsyncResult<Unit> editRachadinha(String orderId, String itemId,
+      String rachadinhaId, String name, double price) async {
     try {
       await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .doc(itemId)
           .collection('rachadinhas')
           .doc(rachadinhaId)
           .update({
-        'nome': nome,
-        'conta': conta,
+        'name': name,
+        'price': price,
       });
       return const Success(unit);
     } catch (e) {
@@ -203,11 +229,11 @@ class RachadinhaFirestore {
   }
 
   AsyncResult<Unit> deleteRachadinha(
-      String pedidoId, String itemId, String rachadinhaId) async {
+      String orderId, String itemId, String rachadinhaId) async {
     try {
       await _store
           .collection('orders')
-          .doc(pedidoId)
+          .doc(orderId)
           .collection('items')
           .doc(itemId)
           .collection('rachadinhas')

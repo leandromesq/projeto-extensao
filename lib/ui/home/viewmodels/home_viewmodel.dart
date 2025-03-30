@@ -7,10 +7,17 @@ import 'package:rachadinha/data/models/order_model.dart';
 import 'package:rachadinha/data/models/rachadinha_model.dart';
 import 'package:rachadinha/data/repositories/rachadinha/rachadinha_repository.dart';
 import 'package:rachadinha/core/widgets/fading_error_dialog.dart';
+import 'package:result_command/result_command.dart';
+import 'package:result_dart/result_dart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final RachadinhaRepository repo;
+
   HomeViewModel(this.repo);
+
+  late final finishOrderCommand = Command1(finishOrder);
+
   final CurrencyTextInputFormatter moneyFormatter =
       CurrencyTextInputFormatter.currency(symbol: '', locale: 'pt-BR');
   OrderModel order = OrderModel();
@@ -19,6 +26,11 @@ class HomeViewModel extends ChangeNotifier {
   List<RachadinhaModel> activeRachadinhas = [];
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+
+  Future<String?> getSavedUID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_uid'); // Retorna null se não houver UID salvo
+  }
 
   updateItemName(String name) {
     item.name = name;
@@ -30,7 +42,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  addItem(BuildContext context) {
+  addItem(BuildContext context) async {
     if (item.price <= 0 || item.name.isEmpty) {
       showFadingErrorPopup(context, 'Preencha os campos corretamente');
       return;
@@ -108,12 +120,13 @@ class HomeViewModel extends ChangeNotifier {
     return total;
   }
 
-  finishOrder() {
+  AsyncResult<Unit> finishOrder(BuildContext context) async {
     // Exemplo de validação: se não houver itens ou pessoas, não finaliza.
     if (order.items.isEmpty || order.items[0].rachadinhas.isEmpty) {
       // Pode disparar um alerta ou log
-      return;
+      return Failure(Exception('Nenhum item ou pessoa selecionada'));
     }
+    await saveOrder(context);
     notifyListeners();
 
     order = OrderModel();
@@ -124,6 +137,7 @@ class HomeViewModel extends ChangeNotifier {
     priceController.clear();
     log('Pedido finalizado');
     notifyListeners();
+    return const Success(unit);
   }
 
   List<RachadinhaModel> personRachadinhas = [];
@@ -162,5 +176,25 @@ class HomeViewModel extends ChangeNotifier {
     );
 
     Overlay.of(context).insert(overlayEntry);
+  }
+
+  saveOrder(BuildContext context) async {
+    var uid = await getSavedUID();
+    var orderItems = order.items;
+    order.userId = uid!;
+    order = await repo.createOrder(order).fold(
+        (s) => s, (error) => showFadingErrorPopup(context, error.toString()));
+    for (var item in orderItems) {
+      var rachadinhaItems = item.rachadinhas;
+      item.orderId = order.id;
+      item = await repo.addItem(item).fold(
+          (s) => s, (error) => showFadingErrorPopup(context, error.toString()));
+      for (var rachadinha in rachadinhaItems) {
+        rachadinha.itemId = item.id;
+        await repo.addRachadinha(rachadinha, order.id).fold((s) => s,
+            (error) => showFadingErrorPopup(context, error.toString()));
+      }
+    }
+    notifyListeners();
   }
 }

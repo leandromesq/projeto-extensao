@@ -7,6 +7,7 @@ import 'package:rachadinha/ui/home/viewmodels/home_viewmodel.dart';
 import 'package:rachadinha/ui/home/widgets/home_app_bar.dart';
 import 'package:rachadinha/ui/home/widgets/home_drawer.dart';
 import 'package:rachadinha/ui/home/widgets/rachadinha_item.dart';
+import 'package:result_command/result_command.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,6 +25,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    ctrl.finishOrderCommand.addListener(_listenable);
+  }
+
+  void _listenable() {
+    if (ctrl.finishOrderCommand.isFailure) {
+      final error = ctrl.finishOrderCommand.value as FailureCommand;
+      ctrl.showFadingErrorPopup(
+          context, error.error.toString().replaceAll('Exception: ', ''));
+    }
   }
 
   @override
@@ -44,6 +54,12 @@ class _HomePageState extends State<HomePage> {
               listenable: ctrl,
               builder: (context, _) {
                 var item = ctrl.item;
+                if (ctrl.finishOrderCommand.isRunning) {
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: context.colors.primarygreen,
+                  ));
+                }
                 return SizedBox(
                   child: Column(
                     children: [
@@ -193,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 80,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    ctrl.finishOrder();
+                                    ctrl.finishOrderCommand.execute(context);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: context.colors.darkgreen,
