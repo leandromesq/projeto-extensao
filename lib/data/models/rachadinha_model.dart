@@ -42,11 +42,11 @@ class RachadinhaModel {
     return {
       'id': id,
       'name': name,
-      'itemId': itemId,
+      'item_id': itemId,
       'price': price,
       'active': active,
       'appid': appid,
-      'itemName': itemName,
+      'item_name': itemName,
     };
   }
 
@@ -54,11 +54,11 @@ class RachadinhaModel {
     return RachadinhaModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      itemId: map['itemId'] ?? '',
+      itemId: map['item_id'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       active: map['active'] ?? false,
       appid: map['appid'] ?? '',
-      itemName: map['itemName'] ?? '',
+      itemName: map['item_name'] ?? '',
     );
   }
 

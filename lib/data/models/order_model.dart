@@ -44,7 +44,7 @@ class OrderModel {
       id: map['id'] ?? '',
       userId: map['userId'] ?? '',
       total: map['total']?.toDouble() ?? 0.0,
-      date: map['date'],
+      date: DateTime.tryParse(map['date']),
     );
   }
 

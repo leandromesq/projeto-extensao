@@ -13,7 +13,8 @@ abstract interface class RachadinhaRepository {
   AsyncResult<ItemModel> addItem(ItemModel item);
   AsyncResult<ItemModel> editItem(ItemModel item);
   AsyncResult<ItemModel> deleteItem(ItemModel item);
-  AsyncResult<List<RachadinhaModel>> findRachadinhas(String itemId);
+  AsyncResult<List<RachadinhaModel>> findRachadinhas(
+      String orderId, String itemId);
   AsyncResult<RachadinhaModel> addRachadinha(
       RachadinhaModel rachadinha, String orderId);
   AsyncResult<RachadinhaModel> editRachadinha(RachadinhaModel rachadinha);

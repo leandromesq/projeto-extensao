@@ -14,14 +14,19 @@ List<RouteEntity> get routes => [
         routeBuilder: b1Builder,
       ),
       RouteEntity(
+        key: '/history',
+        uri: Uri.parse('/history'),
+        routeBuilder: b2Builder,
+      ),
+      RouteEntity(
         key: '/home',
         uri: Uri.parse('/home'),
-        routeBuilder: b2Builder,
+        routeBuilder: b3Builder,
       ),
       RouteEntity(
         key: '/qrcode',
         uri: Uri.parse('/qrcode'),
-        routeBuilder: b3Builder,
+        routeBuilder: b4Builder,
       ),
     ];
 
@@ -32,6 +37,7 @@ const routePaths = (
     login: '/auth/login',
     register: '/auth/register',
   ),
+  history: '/history',
   home: '/home',
   qrcode: '/qrcode',
 );

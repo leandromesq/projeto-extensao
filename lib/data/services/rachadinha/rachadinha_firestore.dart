@@ -49,7 +49,11 @@ class RachadinhaFirestore {
       var orders = querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();
-      return Success(orders.map((order) => OrderModel.fromMap(order)).toList());
+      var orderList = orders.map((order) => OrderModel.fromMap(order)).toList();
+      for (var order in orderList) {
+        order.id = querySnapshot.docs[orderList.indexOf(order)].id;
+      }
+      return Success(orderList);
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
@@ -114,6 +118,26 @@ class RachadinhaFirestore {
       } else {
         return Failure(Exception("Item não encontrado"));
       }
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<List<ItemModel>> findAllItems(String orderId) async {
+    try {
+      QuerySnapshot querySnapshot = await _store
+          .collection('orders')
+          .doc(orderId)
+          .collection('items')
+          .get();
+      var items = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+      var itemList = items.map((item) => ItemModel.fromMap(item)).toList();
+      for (var item in itemList) {
+        item.id = querySnapshot.docs[itemList.indexOf(item)].id;
+      }
+      return Success(itemList);
     } catch (e) {
       return Failure(Exception(e.toString()));
     }
@@ -203,6 +227,32 @@ class RachadinhaFirestore {
       } else {
         return Failure(Exception("Rachadinha não encontrada"));
       }
+    } catch (e) {
+      return Failure(Exception(e.toString()));
+    }
+  }
+
+  AsyncResult<List<RachadinhaModel>> findAllRachadinhas(
+      String orderId, String itemId) async {
+    try {
+      QuerySnapshot querySnapshot = await _store
+          .collection('orders')
+          .doc(orderId)
+          .collection('items')
+          .doc(itemId)
+          .collection('rachadinhas')
+          .get();
+      var rachadinhas = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+      var rachadinhasList = rachadinhas
+          .map((rachadinha) => RachadinhaModel.fromMap(rachadinha))
+          .toList();
+      for (var rachadinha in rachadinhasList) {
+        rachadinha.id =
+            querySnapshot.docs[rachadinhasList.indexOf(rachadinha)].id;
+      }
+      return Success(rachadinhasList);
     } catch (e) {
       return Failure(Exception(e.toString()));
     }

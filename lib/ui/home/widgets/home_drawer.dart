@@ -47,7 +47,8 @@ class HomeDrawer extends StatelessWidget {
               ],
             ),
             onTap: () {
-              // Handle tap on item 1
+              Scaffold.of(context).closeDrawer();
+              Routefly.push(routePaths.history);
             },
           ),
           const Divider(color: Colors.white),
@@ -67,6 +68,7 @@ class HomeDrawer extends StatelessWidget {
               ],
             ),
             onTap: () {
+              Scaffold.of(context).closeDrawer();
               Routefly.push(routePaths.qrcode);
             },
           ),

@@ -31,15 +31,16 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () => Scaffold.of(context).openDrawer(),
       ),
       backgroundColor: context.colors.light,
-      actions: [
-        IconButton(
-          icon: Icon(
-            FontAwesomeIcons.circleUser,
-            color: context.colors.primarygreen,
-            size: 38,
-          ),
-          onPressed: () {},
-        ),
+      actions: const [
+        SizedBox(width: 64),
+        // IconButton(
+        //   icon: Icon(
+        //     FontAwesomeIcons.circleUser,
+        //     color: context.colors.primarygreen,
+        //     size: 38,
+        //   ),
+        //   onPressed: () {},
+        // ),
       ],
     );
   }

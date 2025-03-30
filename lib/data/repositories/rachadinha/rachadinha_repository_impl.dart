@@ -78,7 +78,7 @@ class RachadinhaRepositoryImpl implements RachadinhaRepository {
 
   @override
   AsyncResult<List<ItemModel>> findItems(String orderId) {
-    throw UnimplementedError();
+    return _store.findAllItems(orderId);
   }
 
   @override
@@ -87,7 +87,8 @@ class RachadinhaRepositoryImpl implements RachadinhaRepository {
   }
 
   @override
-  AsyncResult<List<RachadinhaModel>> findRachadinhas(String itemId) {
-    throw UnimplementedError();
+  AsyncResult<List<RachadinhaModel>> findRachadinhas(
+      String orderId, String itemId) {
+    return _store.findAllRachadinhas(orderId, itemId);
   }
 }

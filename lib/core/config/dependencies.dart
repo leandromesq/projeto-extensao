@@ -12,6 +12,7 @@ import 'package:rachadinha/data/services/local_storage.dart';
 import 'package:rachadinha/data/services/rachadinha/rachadinha_firestore.dart';
 import 'package:rachadinha/data/services/user/user_firestore.dart';
 import 'package:rachadinha/ui/auth/viewmodels/auth_viewmodel.dart';
+import 'package:rachadinha/ui/history/viewmodels/history_viewmodel.dart';
 import 'package:rachadinha/ui/home/viewmodels/home_viewmodel.dart';
 import 'package:rachadinha/ui/qrcode/viewmodels/qrcode_viewmodel.dart';
 
@@ -38,6 +39,7 @@ void setupInjection() {
   injector.addSingleton(AuthViewModel.new);
   injector.addSingleton(HomeViewModel.new);
   injector.addSingleton(QrcodeViewModel.new);
+  injector.addSingleton(HistoryViewModel.new);
 
   injector.commit();
 }

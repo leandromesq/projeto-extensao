@@ -5,8 +5,9 @@ import 'package:routefly/routefly.dart';
 
 import 'ui/auth/login_page.dart' as a0;
 import 'ui/auth/register_page.dart' as a1;
-import 'ui/home/home_page.dart' as a2;
-import 'ui/qrcode/qrcode_page.dart' as a3;
+import 'ui/history/history_page.dart' as a2;
+import 'ui/home/home_page.dart' as a3;
+import 'ui/qrcode/qrcode_page.dart' as a4;
 
 Route b0Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(
@@ -24,11 +25,17 @@ Route b2Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(
       ctx,
       settings,
-      const a2.HomePage(),
+      const a2.HistoryPage(),
     );
 Route b3Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(
       ctx,
       settings,
-      const a3.QRCodePage(),
+      const a3.HomePage(),
+    );
+Route b4Builder(BuildContext ctx, RouteSettings settings) =>
+    Routefly.defaultRouteBuilder(
+      ctx,
+      settings,
+      const a4.QRCodePage(),
     );

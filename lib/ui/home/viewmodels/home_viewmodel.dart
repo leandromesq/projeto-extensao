@@ -104,6 +104,20 @@ class HomeViewModel extends ChangeNotifier {
 
   removeRachadinha(RachadinhaModel rachadinha) {
     item.rachadinhas.remove(rachadinha);
+    List<RachadinhaModel> cleanRachadinhas = [];
+    for (var rachadinha in item.rachadinhas) {
+      cleanRachadinhas.add(rachadinha.copyWith(
+        appid: DateTime.now().microsecondsSinceEpoch.toString(),
+        active: false,
+        price: 0,
+      ));
+    }
+    order = OrderModel();
+    order.items.clear();
+    item = ItemModel()
+        .copyWith(appid: DateTime.now().microsecondsSinceEpoch.toString());
+    item.rachadinhas.clear();
+    item.rachadinhas = cleanRachadinhas;
     log(item.toString());
     notifyListeners();
   }
