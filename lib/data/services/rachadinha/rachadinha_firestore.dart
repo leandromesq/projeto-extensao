@@ -16,7 +16,7 @@ class RachadinhaFirestore {
       required DateTime date}) async {
     try {
       DocumentReference docRef = await _store.collection('orders').add({
-        'userId': userId,
+        'user_id': userId,
         'total': total,
         'date': date.toString(),
       });
