@@ -33,7 +33,7 @@ class OrderModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'userId': userId,
+      'user_id': userId,
       'total': total,
       'date': date,
     };
@@ -42,7 +42,7 @@ class OrderModel {
   factory OrderModel.fromMap(Map<String, dynamic> map) {
     return OrderModel(
       id: map['id'] ?? '',
-      userId: map['userId'] ?? '',
+      userId: map['user_id'] ?? '',
       total: map['total']?.toDouble() ?? 0.0,
       date: DateTime.tryParse(map['date']),
     );
