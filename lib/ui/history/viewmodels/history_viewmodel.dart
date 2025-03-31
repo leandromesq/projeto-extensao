@@ -6,6 +6,7 @@ import 'package:rachadinha/data/models/person_model.dart';
 import 'package:rachadinha/data/repositories/rachadinha/rachadinha_repository.dart';
 import 'package:result_command/result_command.dart';
 import 'package:result_dart/result_dart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryViewModel extends ChangeNotifier {
   final RachadinhaRepository repo;
@@ -18,7 +19,8 @@ class HistoryViewModel extends ChangeNotifier {
   OrderModel? selectedOrder;
 
   AsyncResult<Unit> findOrders() async {
-    orders = await repo.findOrders().fold((s) => s, (error) => []);
+    var uid = await getSavedUID();
+    orders = await repo.findOrders(uid!).fold((s) => s, (error) => []);
     for (var order in orders) {
       order.items =
           await repo.findItems(order.id).fold((s) => s, (error) => []);
@@ -64,5 +66,10 @@ class HistoryViewModel extends ChangeNotifier {
         }
       }
     }
+  }
+
+  Future<String?> getSavedUID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_uid'); // Retorna null se não houver UID salvo
   }
 }

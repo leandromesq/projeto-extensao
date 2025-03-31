@@ -43,9 +43,12 @@ class RachadinhaFirestore {
     }
   }
 
-  AsyncResult<List<OrderModel>> findOrders() async {
+  AsyncResult<List<OrderModel>> findOrders(String userId) async {
     try {
-      QuerySnapshot querySnapshot = await _store.collection('orders').get();
+      QuerySnapshot querySnapshot = await _store
+          .collection('orders')
+          .where('user_id', isEqualTo: userId)
+          .get();
       var orders = querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();

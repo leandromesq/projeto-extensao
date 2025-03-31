@@ -10,8 +10,8 @@ class RachadinhaRepositoryImpl implements RachadinhaRepository {
   RachadinhaRepositoryImpl(this._store);
 
   @override
-  AsyncResult<List<OrderModel>> findOrders() {
-    return _store.findOrders();
+  AsyncResult<List<OrderModel>> findOrders(String userId) {
+    return _store.findOrders(userId);
   }
 
   @override

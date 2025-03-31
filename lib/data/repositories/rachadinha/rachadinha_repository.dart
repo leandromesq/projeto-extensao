@@ -5,7 +5,7 @@ import 'package:result_dart/result_dart.dart';
 
 abstract interface class RachadinhaRepository {
   AsyncResult<OrderModel> createOrder(OrderModel orderModel);
-  AsyncResult<List<OrderModel>> findOrders();
+  AsyncResult<List<OrderModel>> findOrders(String userId);
   AsyncResult<OrderModel> findOrderbyId(String orderId);
   AsyncResult<OrderModel> editOrder(OrderModel orderModel);
   AsyncResult<OrderModel> deleteOrder(String orderId);
