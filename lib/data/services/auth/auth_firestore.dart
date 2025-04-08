@@ -22,14 +22,12 @@ class AuthFirestore {
     required DateTime birthDate,
   }) async {
     try {
-      // Criar usuário no Firebase Auth
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Salvar informações no Firestore (sem a senha!)
       await _store.collection('users').doc(userCredential.user!.uid).set({
         'name': name,
         'email': email,
@@ -38,6 +36,15 @@ class AuthFirestore {
         'birthDate': birthDate.toString(),
         'createdAt': DateTime.now(),
       });
+
+      if (userCredential.user != null) {
+        String uid = userCredential.user!.uid;
+        log('UID: $uid');
+
+        // Salva o UID no SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_uid', uid);
+      }
 
       log('Usuário autenticado e salvo no Firestore!');
       return Success(UserModel(
