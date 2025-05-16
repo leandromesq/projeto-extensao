@@ -23,7 +23,6 @@ class HomeViewModel extends ChangeNotifier {
   OrderModel order = OrderModel();
   ItemModel item = ItemModel()
       .copyWith(appid: DateTime.now().microsecondsSinceEpoch.toString());
-  List<RachadinhaModel> activeRachadinhas = [];
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
@@ -124,6 +123,7 @@ class HomeViewModel extends ChangeNotifier {
 
   double getPersonTotal(String name) {
     double total = 0;
+    if (name.isEmpty) return total;
     for (var item in order.items) {
       var personRachadinha = item.rachadinhas.firstWhere((r) => r.name == name);
       var itemPrice = personRachadinha.price;

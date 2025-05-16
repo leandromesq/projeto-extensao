@@ -85,8 +85,40 @@ class _RachadinhaItemState extends State<RachadinhaItem> {
                     backgroundColor: Colors.red,
                     label: 'Excluir',
                     labelStyle: const TextStyle(fontSize: 16),
-                    onTap: () {
-                      ctrl.removeRachadinha(rachadinha);
+                    onTap: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Atenção'),
+                              content: const Text(
+                                  'Excluir uma pessoa com rachadinha em andamento removerá todos os itens, deseja continuar?'),
+                              actionsAlignment: MainAxisAlignment.spaceBetween,
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Cancelar',
+                                      style: TextStyle(color: Colors.red)),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                    await ctrl.removeRachadinha(rachadinha);
+                                    if (context.mounted &&
+                                        ctrl.order.items.isNotEmpty) {
+                                      ctrl.showFadingErrorPopup(context,
+                                          'Todos os itens foram removidos');
+                                    }
+                                  },
+                                  child: Text('Confirmar',
+                                      style: TextStyle(
+                                          color: context.colors.darkgreen)),
+                                ),
+                              ],
+                            );
+                          });
                     },
                   ),
                   SpeedDialChild(
